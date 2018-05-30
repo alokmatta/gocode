@@ -29,8 +29,7 @@ func main() {
 	}
 	
 	// try making http request against sample site
-	var ycord = 0;
-	for(ycord=0;ycord<10;ycord++){
+	for ycord := 0; ycord<10; ycord++ {
 		
 	response, err := http.Get("http://129.157.179.180:3000/fighters/45/"+ycord+"/yellow/alokmatta")
 	if err != nil {
