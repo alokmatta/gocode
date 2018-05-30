@@ -32,7 +32,7 @@ func main() {
 	// try making http request against sample site
 	for ycord := 0; ycord<10; ycord++ {
 		
-		url := "http://129.157.179.180:3000/fighters/45/"+ strconv.Itoa(ycord) + "/yellow/alokmatta"
+		url := "http://129.157.179.180:3000/reactorCore/320/650/yellow/alokmatta"
 		response, err := http.Get(url)
 		if err != nil {
 			fmt.Println("Error making GET call")
