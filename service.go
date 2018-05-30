@@ -5,6 +5,7 @@ import ("github.com/ant0ine/go-json-rest/rest"
 	_ "github.com/go-sql-driver/mysql"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"os")
 func main() {
     // My microservice!
@@ -31,7 +32,7 @@ func main() {
 	// try making http request against sample site
 	for ycord := 0; ycord<10; ycord++ {
 		
-		response, err := http.Get("http://129.157.179.180:3000/fighters/45/"+ycord+"/yellow/alokmatta")
+		response, err := http.Get("http://129.157.179.180:3000/fighters/45/"+ strconv.Itoa(ycord) + "/yellow/alokmatta")
 		if err != nil {
 			fmt.Println("Error making GET call")
 		} else {
