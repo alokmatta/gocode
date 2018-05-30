@@ -29,22 +29,19 @@ func main() {
 	}
 	
 	// try making http request against sample site
-
-	
-		response, err := http.Get("http://129.157.179.180:3000/reactorCore/320/650/yellow/alokmatta")
+	response, err := http.Get("http://129.157.179.180:3000/reactorCore/320/650/yellow/alokmatta")
+	if err != nil {
+		fmt.Println("Error making GET call")
+	} else {
+	    defer response.Body.Close()
+        contents, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			fmt.Println("Error making GET call")
+		  fmt.Println("Error parsing GET call")
 		} else {
-		    defer response.Body.Close()
-		contents, err := ioutil.ReadAll(response.Body)
-			if err != nil {
-			  fmt.Println("Error parsing GET call")
-			} else {
-			  fmt.Printf("%s\n", string(contents))
-			}
-
+		  fmt.Printf("%s\n", string(contents))
 		}
-	
+		
+	}
 	api := rest.NewApi()
 	api.Use(rest.DefaultDevStack...)
 	api.SetApp(rest.AppSimple(func(w rest.ResponseWriter, r *rest.Request) {
