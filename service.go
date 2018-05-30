@@ -7,6 +7,7 @@ import ("github.com/ant0ine/go-json-rest/rest"
 	"net/http"
 	"os")
 func main() {
+    // My microservice!
     // try making database connection and query
     db, err := sql.Open("mysql", "user:pass@tcp(ip:port)/databasename")
     defer db.Close()
