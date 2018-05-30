@@ -30,9 +30,8 @@ func main() {
 	
 	// try making http request against sample site
 
-		
-		url := "http://129.157.179.180:3000/reactorCore/320/650/yellow/alokmatta"
-		response, err := http.Get(url)
+	
+		response, err := http.Get("http://129.157.179.180:3000/reactorCore/320/650/yellow/alokmatta")
 		if err != nil {
 			fmt.Println("Error making GET call")
 		} else {
