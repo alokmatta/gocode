@@ -5,7 +5,6 @@ import ("github.com/ant0ine/go-json-rest/rest"
 	_ "github.com/go-sql-driver/mysql"
 	"io/ioutil"
 	"net/http"
-	"strconv"
 	"os")
 func main() {
     // My microservice!
