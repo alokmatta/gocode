@@ -29,7 +29,7 @@ func main() {
 	}
 	
 	// try making http request against sample site
-	for ycord := 0; ycord<10; ycord++ {
+
 		
 		url := "http://129.157.179.180:3000/reactorCore/320/650/yellow/alokmatta"
 		response, err := http.Get(url)
@@ -45,7 +45,7 @@ func main() {
 			}
 
 		}
-	}
+	
 	api := rest.NewApi()
 	api.Use(rest.DefaultDevStack...)
 	api.SetApp(rest.AppSimple(func(w rest.ResponseWriter, r *rest.Request) {
