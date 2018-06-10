@@ -26,8 +26,8 @@ func (t *ArtistViewsChaincode) Init(stub shim.ChaincodeStubInterface) pb.Respons
 func (t *ArtistViewsChaincode) invoke(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	fmt.Println("ArtistViewsChaincode Invoke Called")
 	fmt.Print("Artist Count ")
-	count = count + 1
-	fmt.Print(count)
+	Count = Count + 1
+	fmt.Print(Count)
 	return shim.Success(nil)
 }
 
