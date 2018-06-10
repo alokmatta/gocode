@@ -24,7 +24,7 @@ func (t *ArtistViewsChaincode) Init(stub shim.ChaincodeStubInterface) pb.Respons
 
 func (t *ArtistViewsChaincode) invoke(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	fmt.Println("Invoke Called")
-	return shim.Success(nill)
+	return shim.Success(nil)
 }
 
 func (t *ArtistViewsChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
