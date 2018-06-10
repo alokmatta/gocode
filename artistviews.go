@@ -18,16 +18,19 @@ type ArtistViewsChaincode struct {
 // Init callback representing the invocation of a chaincode
 // This chaincode will manage two accounts A and B and will transfer X units from A to B upon invoke
 func (t *ArtistViewsChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
-	
+	fmt.Println("Init Called")
 	return shim.Success(nil)
 }
 
 func (t *ArtistViewsChaincode) invoke(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	fmt.Println("Invoke Called")
-	return shim.Success("invoke called")
+	return shim.Success(nill)
 }
 
 func (t *ArtistViewsChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
+	
+	fmt.Println("Invoke Called")
+	fmt.Println("Hello world")
 	function, args := stub.GetFunctionAndParameters()
 	if function == "invoke" {
 		return t.invoke(stub, args)
