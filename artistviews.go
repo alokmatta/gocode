@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	//"strconv"
+        //"strconv"
+        "flag"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
@@ -17,15 +18,17 @@ type ArtistViewsChaincode struct {
 //var A, B string
 //var Aval, Bval, X int
 //var Count int = 0
-k := flag.Int("n", 10, "k")
-tk := topk.New(*k)
+
 var top10 [10]string
 var newTop10 [10]string
+var tk *topk.Stream
+var k *int
 
 // Init callback representing the invocation of a chaincode
 // This chaincode will manage two accounts A and B and will transfer X units from A to B upon invoke
 func (t *ArtistViewsChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
-	
+	k := flag.Int("n", 10, "k")
+        tk = topk.New(*k)
 	return shim.Success(nil)
 }
 
