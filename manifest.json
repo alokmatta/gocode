@@ -1,9 +1,0 @@
-{
-  "runtime":{
-    "majorVersion":"1.8.3"
-  },
-  "command": "sh start.sh",
-  "startupTime": "600",
-  "release": {},
-  "notes": "Go fighter"
-}
