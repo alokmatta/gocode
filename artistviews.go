@@ -1,8 +1,35 @@
+/*
+
+Example sample chaincode using a Top K Algorithm to maintain a list of top ten Artists and notify them accordingly.
+Limited PoC as the calculation is done during invoke rather a more ideal offchain Blockchain listener microservice (using the events SDK) than ideally runs once
+the transaction is actually verified. Also ideally should have PubSub layer for better reliability.
+
+Commands to test (Tested via https://github.com/hyperledger/fabric-samples/tree/release-1.1/first-network) on Azure Cloud VM:
+
+peer chaincode install -n artistViews -v 1 -p github.com/gocode/
+
+peer chaincode instantiate -o orderer.example.com:7050 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n artistViews -v 1 -c '{"Args":[""]}' -P 'OR('\''Org1MSP.peer'\'','\''Org2MSP.peer'\'')'
+
+peer chaincode invoke -o orderer.example.com:7050 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n artistViews -c '{"Args":["invoke","Coldplay","1"]}' 
+
+Sample Output by attaching to the Instantiated Docker instance:
+root@everyvm:/home/every# docker attach 74e1270ecc8a
+ArtistViewsChaincode Invoke Called
+Current Top Ten [Britney         ]
+Britney 2 0
+ArtistViewsChaincode Invoke Called
+New Artist in top 10 - Coldplay
+Current Top Ten [Britney Coldplay        ]
+Britney 2 0
+Coldplay 1 0
+
+*/
+
 package main
 
 import (
 	"fmt"
-        //"strconv"
+        "strconv"
         "flag"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
@@ -11,13 +38,10 @@ import (
 	"github.com/dgryski/go-topk"
 )
 
-// SimpleChaincode example simple Chaincode implementation
+// ArtistViewsChaincode Chaincode implementation
 type ArtistViewsChaincode struct {
 }
 
-//var A, B string
-//var Aval, Bval, X int
-//var Count int = 0
 
 var top10 [10]string
 var newTop10 [10]string
@@ -25,7 +49,6 @@ var tk *topk.Stream
 var k *int
 
 // Init callback representing the invocation of a chaincode
-// This chaincode will manage two accounts A and B and will transfer X units from A to B upon invoke
 func (t *ArtistViewsChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	k := flag.Int("n", 10, "k")
         tk = topk.New(*k)
@@ -34,24 +57,37 @@ func (t *ArtistViewsChaincode) Init(stub shim.ChaincodeStubInterface) pb.Respons
 
 func (t *ArtistViewsChaincode) invoke(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	fmt.Println("ArtistViewsChaincode Invoke Called")
-	//fmt.Print("Artist Count ")
-	//Count = Count + 1
-	//fmt.Print(Count)
-	item := args[0]
-	tk.Insert(item, 1)
+
+        if len(args) != 2 {
+		return shim.Error("Incorrect number of arguments. Expecting Artist & Count")
+	}
+        item := args[0]
+        var count int
+        var err error
+
+        count, err = strconv.Atoi(args[1])
+	if err != nil {
+		return shim.Error("Expecting integer value for Artist View Count")
+	}
+        
+	tk.Insert(item, count)
 	
 	KeysArray := tk.Keys()
 	
 	if len(top10) > 0 {
 			if top10[0] != KeysArray[0].Key {
-				fmt.Println("New number 1 - " + KeysArray[0].Key)
+                                fmt.Println("New number 1 - " + KeysArray[0].Key)
+                                fmt.Println(KeysArray[0].Key + "Notified as new Number 1 Artist")
+                                //Actually notify user by SMS and Email here using Twilio/SendGrid API's
 			}
 		}
 
 		for i, v := range KeysArray {
 
 			if !contains(v.Key, top10) {
-				fmt.Println("New Artist in top 10 - " + v.Key)
+                                fmt.Println("New Artist in top 10 - " + v.Key)
+                                fmt.Println(v.Key + "Notified as Top 10 Artist")
+                                 //Actually notify user by SMS and Email here using Twilio/SendGrid API's
 			}
 
 			newTop10[i] = KeysArray[i].Key
